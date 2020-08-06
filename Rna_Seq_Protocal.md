@@ -1,4 +1,4 @@
-# protocal
+# Protocal
 
 ## 1.下载sra
 

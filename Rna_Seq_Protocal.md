@@ -125,13 +125,34 @@ samtools index abc.sort.bam
 for i in {16..37}
 do
     samtools view -Sb ~/ncbi/public/sra/darmor_sam/SRR78952${i}.sam > ~/ncbi/public/sra/darmor_sam/SRR78952${i}.bam
-    samtools  sort -n ~/ncbi/public/sra/darmor_sam/SRR78952${i}.bam -o ~/ncbi/public/sra/darmor_sam/SRR78952${i}_sorted.bam
-    samtools index ~/ncbi/public/sra/darmor_sam/SRR78952${i}_sorted.bam
+    samtools  sort  ~/ncbi/public/sra/darmor_sam/SRR78952${i}.bam -o ~/ncbi/public/sra/darmor_sam/SRR78952${i}.sort.bam
+    samtools index ~/ncbi/public/sra/darmor_sam/SRR78952${i}.sort.bam
 done
 
 ##最终得到
 #未排序的*.sam;
-#排了序的*_sored.bam;
-#以及index
+#排了序的*.sort.bam;
+#以及index:*.bam.bai
+
+###
+#注意：在sort的时候如果无必要不要用-n，因为index的时候需要默认排序，而-n设定排序方式按short reads的ID排序。默认下是按序列在fasta文件中的顺序（即header）和序列从左往右的位点排序。
+samtools  sort -n ~/ncbi/public/sra/darmor_sam/SRR78952${i}.bam -o ~/ncbi/public/sra/darmor_sam/SRR78952${i}.sort.bam#改自前面脚本
+
+####
+#果没有特别需求，比对的时候就不要sort by coordinate了！！！sort一般都是为了建index
+```
+
+## 7.将基因组注释文件gff->gtf
+
+```bash
+##使用Cufflinks进行操作
+
+```
+
+## 8.量化
+
+```bash
+##使用featureCounts
+featureCounts -T 8  -g transcript_id -a ~/ncbi/public/sra/darmor/Darmor-bzh/Brassica_napus.annotation_v5.gtf -o all.id.txt ~/ncbi/public/sra/darmor/darmor_sam/bam/*.bam
 ```
 

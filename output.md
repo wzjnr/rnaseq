@@ -1,6 +1,6 @@
 ### Sample list / meta table: `01.meta.tsv`
 - `SampleID`, `Tissue`, `Gentoype`, `Treatment`, `Replicate`
-- `paired`: paired end or not
+- `paired`: paired end or not（双端测序或单端测序）
 - `spots`: number of reads (single-end) or pairs (paired-end)
 - `avgLength`: average read length
 

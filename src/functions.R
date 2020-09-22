@@ -4,24 +4,26 @@ require(ape)
 require(ggtree)
 require(ggforce)
 require(Rtsne)
-dirp = '~/projects/rnaseq'
-dird = file.path(dirp, 'data')
-dirc = '/scratch.global/zhoux379/rnaseq'
-t_cfg = read_gspread_master(lib='rnaseq')
+dirp = '~/projects/rnaseq'#读入一个rnaseq文件夹地址
+dird = file.path(dirp, 'data')#读入rnaseq文件夹中的data文件或文件夹
+dirc = '/scratch.global/zhoux379/rnaseq'#再读入另一个rnaseq文件夹
+t_cfg = read_gspread_master(lib='rnaseq')#????不懂
 #f_yml = file.path(dird, '10.cfg.yaml')
 #Sys.setenv("R_CONFIG_FILE" = f_yml)
 
+##感觉这个函数是读取数据（问题是读取的是什么数据？应该是rnaseq的目录文件）并对数据进行注释。
 read_rnaseq <- function(yid) {
     #{{{
-    res = rnaseq_cpm(yid)
-    th = res$th; tm = res$tm
+    res = rnaseq_cpm(yid)#将yid赋予res？
+    th = res$th; tm = res$tm#读取res中th和tm
     th = th %>% replace_na(list(Tissue='',Genotype='B73',Treatment='')) %>%
-        mutate(Tissue=as.character(Tissue)) %>%
-        mutate(Genotype=as.character(Genotype)) %>%
-        mutate(Treatment=as.character(Treatment))
-    yids_dev = c('rn10a','rn11a','rn13b','rn14b','rn14c','rn14e',"rn16b","rn16c","rn18g")
+        mutate(Tissue=as.character(Tissue)) %>% #添加Tissue组，并转换成character
+        mutate(Genotype=as.character(Genotype)) %>% #添加Genotype组，并转换成character
+        mutate(Treatment=as.character(Treatment)) #添加Treatment组，并转换成character
+    yids_dev = c('rn10a','rn11a','rn13b','rn14b','rn14c','rn14e',"rn16b","rn16c","rn18g") #定义yids_dev
+    ##在不同情况下给Treatment命名下定义
     if(yid == 'rn12a') {
-        th = th %>% filter(Treatment == 'WT')
+        th = th %>% filter(Treatment == 'WT') 
     } else if(yid == 'rn17c') {
         th = th %>% filter(Treatment == 'con')
     } else if(yid %in% c(yids_dev,'rn19c')) {
@@ -39,6 +41,7 @@ read_rnaseq <- function(yid) {
     list(th=th, tm=tm)
     #}}}
 }
+
 read_multiqc_trimmomatic <- function(fi, paired = T) {
     #{{{
     ti = read_tsv(fi)
